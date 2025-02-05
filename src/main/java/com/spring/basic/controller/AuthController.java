@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,5 +117,70 @@ public class AuthController {
         return new ResponseEntity<>("로그인 성공", headers, HttpStatus.OK);
 
     }
+
+    /**
+     * 토큰 인증 방식
+     */
+    @GetMapping("/token")
+    public String tokenAPI(HttpServletRequest request) {
+        log.info("::: AuthController.tokenAPI()");
+        Cookie[] cookies = request.getCookies();
+        String token = this.findCookie("token", cookies);
+        if (token != null) {
+            // 토큰을 해독해서 유저 데이터를 활용
+            String decodedToken = parseToken(token);
+            log.info("found token: {}", token);
+            log.info(decodedToken);
+
+        } else {
+            log.info("token not found");
+        }
+        return "success";
+    }
+
+
+    @GetMapping("/token-login")
+    public ResponseEntity<String> tokenLoginAPI() {
+        log.info("::: AuthController.tokenLoginAPI()");
+        // 1. 로그인 로직 처리
+
+        // 2. 데이터 베이스에서 사용자 정보 조회
+        String userData = "userId: 1";
+
+        // 3. 토큰 생성
+        String encodedData = encodeToBase64(userData);
+
+        // 4. 생성 - 헤더 생성
+        String headerValue = "token" + "=" + encodedData;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Set-Cookie", headerValue);
+
+        // 5. 응답 반환
+        return new ResponseEntity<>("로그인 성공", headers, HttpStatus.OK);
+    }
+
+    private String encodeToBase64(String input) {
+        byte[] encodedBytes = Base64.getEncoder().encode(input.getBytes());
+        String encodedToken = new String(encodedBytes);
+        return encodedToken;
+    }
+
+    private String parseToken(String token) {
+        byte[] decodedBytes = Base64.getDecoder().decode(token);
+        String decodedToken = new String(decodedBytes);
+        return decodedToken;
+    }
+
+    //쿠키 인증 방식에 있음
+//    private String findCookie(String key, Cookie[] cookies) {
+//        if (cookies != null ) {
+//            for (Cookie cookie : cookies) {
+//                if (key.equals(cookie.getName())) {
+//                    return cookie.getValue();
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
 }
