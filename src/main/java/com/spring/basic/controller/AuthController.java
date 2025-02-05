@@ -10,15 +10,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
     //속성
+    //세션 저장소
+    private final Map<String, String> sessionStore = new HashMap<>();
 
     //생성자
 
     //기능
+
+    /**
+     * 쿠키 인증 방식
+     */
     @GetMapping("/cookie")
     public String cookieAPI(HttpServletRequest request) {
         log.info("::: AuthController.cookieAPI");
@@ -65,4 +74,47 @@ public class AuthController {
         headers.set("Set-Cookie", headerValue);
         return new ResponseEntity<>("login success", headers, HttpStatus.OK);
     }
+
+    /**
+     * 세션 인증 방식
+     */
+    @GetMapping("/session")
+    public String sessionAPI(HttpServletRequest request) {
+        log.info("::: AuthController.sessionLoginAPI");
+
+        //쿠키에서 sessionId 검색
+        Cookie[] cookies = request.getCookies();
+        String sessionId = findCookie("sessionId", cookies);
+
+        // 세션 스토어에서 sessionId로 유저 데이터 조회
+        if (sessionId != null) {
+            String userData = sessionStore.get(sessionId);
+            log.info("found user session : {}", userData);
+            return "found user session" + userData;
+        } else {
+            return "ueser not found";
+        }
+    }
+
+    @GetMapping("/session-login")
+    public ResponseEntity<String> sessionLoginAPI() {
+        log.info("::: AuthController.sessionLoginAPI");
+        //1. 로그인 데이터 처리
+
+        // 데이터 베이스에서 사용자 정보 조회
+        String sessionId = "cat";
+        String sessionData = "userId : 1";
+
+        //2. 세션 저장소에 유저 정보 저장
+        sessionStore.put(sessionId, sessionData);
+
+        //sessionId = cat (생성 - 헤더 생성)
+        String headerValue = "sessionId"+ "=" + sessionId;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Set-Cookie", headerValue);
+
+        return new ResponseEntity<>("로그인 성공", headers, HttpStatus.OK);
+
+    }
+
 }
