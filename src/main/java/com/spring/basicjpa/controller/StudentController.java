@@ -4,6 +4,7 @@ import com.spring.basicjpa.dto.student.StudentCreateRequestDto;
 import com.spring.basicjpa.dto.student.StudentCreateResponseDto;
 import com.spring.basicjpa.dto.student.StudentCreateResponseDto;
 import com.spring.basicjpa.dto.student.StudentListResponseDto;
+import com.spring.basicjpa.service.CourseNotFoundException;
 import com.spring.basicjpa.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,13 @@ public class StudentController {
      */
     @PostMapping
     public ResponseEntity<StudentCreateResponseDto> createCourseAPI(@RequestBody StudentCreateRequestDto studentCreateRequestDto) {
-        StudentCreateResponseDto response = studentService.createStudent(studentCreateRequestDto);
-        return new ResponseEntity<StudentCreateResponseDto>(response, HttpStatus.CREATED);
+        try {
+            StudentCreateResponseDto response = studentService.createStudent(studentCreateRequestDto);
+            return new ResponseEntity<StudentCreateResponseDto>(response, HttpStatus.CREATED);
+
+        }catch (CourseNotFoundException e) {
+            return new ResponseEntity<StudentCreateResponseDto>(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
