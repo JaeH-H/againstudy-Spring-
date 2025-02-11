@@ -30,7 +30,7 @@ public class StudentService {
     public StudentCreateResponseDto createStudent(StudentCreateRequestDto studentCreateRequestDto) {
         Long foundCourseId = studentCreateRequestDto.getCourseId();
         Course foundCourse = courseRepository.findById(foundCourseId)
-                .orElseThrow(() -> new NoSuchElementException("course not found"));
+                .orElseThrow(() -> new CourseNotFoundException("course not found"));
         Student newStudent = Student.createFrom(studentCreateRequestDto.getStudentName(), foundCourse);
         Student savedStudent = studentRepository.save(newStudent);
         return StudentCreateResponseDto.createFrom(savedStudent);
