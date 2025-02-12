@@ -23,13 +23,17 @@ public class StudentController {
      */
     @PostMapping
     public ResponseEntity<StudentCreateResponseDto> createCourseAPI(@RequestBody StudentCreateRequestDto studentCreateRequestDto) {
-        try {
-            StudentCreateResponseDto response = studentService.createStudent(studentCreateRequestDto);
-            return new ResponseEntity<StudentCreateResponseDto>(response, HttpStatus.CREATED);
+//        try {
+//            StudentCreateResponseDto response = studentService.createStudent(studentCreateRequestDto);
+//            return new ResponseEntity<StudentCreateResponseDto>(response, HttpStatus.CREATED);
+//
+//        }catch (CourseNotFoundException e) {
+//            return new ResponseEntity<StudentCreateResponseDto>(HttpStatus.NOT_FOUND);
+//        }
 
-        }catch (CourseNotFoundException e) {
-            return new ResponseEntity<StudentCreateResponseDto>(HttpStatus.NOT_FOUND);
-        }
+        //GlobalExceptionHandler를 통한 예외처리로 Controller에서는 성공만 신경쓰면 된다.
+        StudentCreateResponseDto response = studentService.createStudent(studentCreateRequestDto);
+        return new ResponseEntity<StudentCreateResponseDto>(response, HttpStatus.CREATED);
     }
 
     /**
