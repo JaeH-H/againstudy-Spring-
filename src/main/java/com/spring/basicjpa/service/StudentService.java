@@ -29,8 +29,12 @@ public class StudentService {
     @Transactional
     public StudentCreateResponseDto createStudent(StudentCreateRequestDto studentCreateRequestDto) {
         Long foundCourseId = studentCreateRequestDto.getCourseId();
+//        Course foundCourse = courseRepository.findById(foundCourseId)
+//                .orElseThrow(() -> new CourseNotFoundException("course not found"));
+
+        //ExceptionCheckFilter를 사용한 예외처리
         Course foundCourse = courseRepository.findById(foundCourseId)
-                .orElseThrow(() -> new CourseNotFoundException("course not found"));
+                .orElseThrow(() -> new RuntimeException("course not found"));
         Student newStudent = Student.createFrom(studentCreateRequestDto.getStudentName(), foundCourse);
         Student savedStudent = studentRepository.save(newStudent);
         return StudentCreateResponseDto.createFrom(savedStudent);
