@@ -32,18 +32,11 @@ public class StudentController {
      */
     public ResponseEntity<ApiResponse<StudentCreateResponseDto>> createCourseAPI(@RequestBody StudentCreateRequestDto studentCreateRequestDto) {
 
-        long startTime = System.currentTimeMillis();
-
-        try{
             //GlobalExceptionHandler를 통한 예외처리로 Controller에서는 성공만 신경쓰면 된다.
             StudentCreateResponseDto response = studentService.createStudent(studentCreateRequestDto);
             ApiResponse<StudentCreateResponseDto> apiResponse = ApiResponse.success(HttpStatus.CREATED, "created", response);
             return new ResponseEntity<ApiResponse<StudentCreateResponseDto>>(apiResponse, HttpStatus.CREATED);
-        } finally {
-            long endTime = System.currentTimeMillis();
-            long executeTime = endTime - startTime;
-            log.info("::: 실행 시간 : {}ms", executeTime);
-        }
+
 
 //         try {
 //            StudentCreateResponseDto response = studentService.createStudent(studentCreateRequestDto);
