@@ -12,8 +12,19 @@ import org.aspectj.lang.annotation.*;
 @Aspect
 public class AspectPractice {
     //포인트컷
+
+    /**
+     * 패키지 기반 포인트컷
+     */
     @Pointcut("execution(* com.spring.basicjpa.service..*(..))") // 범위 설정
     private void serviceLayerPointCut() {}
+
+    /**
+     * 어노테이션 기반 포인트 컷
+     */
+    @Pointcut("@annotation(com.spring.basicjpa.aop.TrackTime)")
+    private void trackTimePointCut() {}
+
 
     //어드바이스
     /**
