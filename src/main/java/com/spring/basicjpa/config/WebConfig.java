@@ -1,5 +1,6 @@
 package com.spring.basicjpa.config;
 
+import com.spring.basicjpa.aop.AspectPractice;
 import com.spring.basicjpa.filter.ExceptionCheckFilter;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.Filter;
@@ -17,6 +18,11 @@ public class WebConfig {
         filterFilterRegistrationBean.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.ERROR);
         filterFilterRegistrationBean.addUrlPatterns("/*");
         return filterFilterRegistrationBean;
+    }
+
+    @Bean
+    public AspectPractice aspectPractice() {
+        return new AspectPractice();
     }
 }
 
