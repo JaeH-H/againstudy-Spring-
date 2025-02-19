@@ -21,7 +21,7 @@ public class TransactionService2 {
      * 기본 롤백 정책
      * 언체크예외만 롤백 시킨다.
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(noRollbackFor = RuntimeException.class)
     public void defaultRollbackService() throws Exception {
 
         // 1. 작업단위 : 수업A 생성
