@@ -13,6 +13,10 @@ public class TransactionService2 {
     //속성
     private final CourseRepository courseRepository;
 
+    private final RegistrationService registrationService;
+    private final PaymentService paymentService;
+    private final LoggingService loggingService;
+
     //생성자
 
     //기능
@@ -70,4 +74,12 @@ public class TransactionService2 {
             throw new RuntimeException("예외발생");
         }
     }
+
+    @Transactional
+    public void processTransactionV2() {
+        registrationService.processRegistration();
+        paymentService.processPayment();
+        loggingService.processLogging();
+    }
+
 }
