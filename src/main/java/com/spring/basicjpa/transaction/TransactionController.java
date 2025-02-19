@@ -22,7 +22,7 @@ public class TransactionController {
      */
     @GetMapping("/propagation")
     public void checkPropagationPolicyAPI() {
-        transactionService2.processTransaction();
+        transactionService2.processTransactionV2();
     }
 
 
