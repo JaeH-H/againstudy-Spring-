@@ -18,6 +18,17 @@ public class TransactionController {
     private final TransactionService2 transactionService2;
 
     /**
+     * 전파 정책 실습 API
+     */
+    @GetMapping("/propagation")
+    public void checkPropagationPolicyAPI() {
+        transactionService2.processTransaction();
+    }
+
+
+
+
+    /**
      * 롤백 정책 실습
      */
     @GetMapping("/rollback")
