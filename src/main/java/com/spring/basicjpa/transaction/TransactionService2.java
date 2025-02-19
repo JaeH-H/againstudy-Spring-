@@ -3,10 +3,12 @@ package com.spring.basicjpa.transaction;
 import com.spring.basicjpa.domain.Course;
 import com.spring.basicjpa.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TransactionService2 {
@@ -41,6 +43,7 @@ public class TransactionService2 {
             throw new Exception("예외발생");
         }
     }
+
 
     @Transactional
     public void processTransaction() {
@@ -79,7 +82,16 @@ public class TransactionService2 {
     public void processTransactionV2() {
         registrationService.processRegistration();
         paymentService.processPayment();
-        loggingService.processLogging();
+
+        /**
+         * loggingService에서 예외가 발생하면 상위로 전파되기 때문에
+         * 예외처리를 안해주면 processTransactionV2가 전부 롤백이 된다.
+         */
+        try {
+            loggingService.processLogging();
+        } catch (RuntimeException e) {
+            log.info("예외처리");
+        }
     }
 
 }
