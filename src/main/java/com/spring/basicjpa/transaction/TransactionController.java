@@ -15,6 +15,18 @@ public class TransactionController {
 
     private final ApplicationContext applicationContext;
 
+    private final TransactionService2 transactionService2;
+
+    /**
+     * 롤백 정책 실습
+     */
+    @GetMapping("/rollback")
+    public void checkRollbackAPI() throws Exception {
+        transactionService2.defaultRollbackService();
+
+    }
+
+
     /**
      * 프록시 객체 확인 메서드
      */
